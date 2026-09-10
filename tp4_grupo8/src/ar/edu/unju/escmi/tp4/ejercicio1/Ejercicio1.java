@@ -1,204 +1,160 @@
-package ar.edu.unju.escmi.tp4.ejercicio1;
+﻿package ar.edu.unju.escmi.tp4.ejercicio1;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Jugador {
-    private String dni;
-    private String nombre;
-    private String equipo;
-    private String nacionalidad;
-    private double estatura;
-
-    public Jugador() {
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEquipo() {
-        return equipo;
-    }
-
-    public void setEquipo(String equipo) {
-        this.equipo = equipo;
-    }
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
-    }
-
-    public double getEstatura() {
-        return estatura;
-    }
-
-    public void setEstatura(double estatura) {
-        this.estatura = estatura;
-    }
-
-    public void mostrarDatos() {
-        System.out.println("DNI: " + dni);
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Equipo: " + equipo);
-        System.out.println("Nacionalidad: " + nacionalidad);
-        System.out.println("Estatura: " + estatura + " m");
-    }
-}
 
 public class Ejercicio1 {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        ArrayList<Jugador> listaJugadores = new ArrayList<>();
-        int op = 0;
-
+        Scanner scanner=new Scanner(System.in);
+        ArrayList<Jugador> jugadores=new ArrayList<>();
+        int opcion;
         do {
-            System.out.println("\n--- MENU DE OPCIONES ---");
-            System.out.println("1 – Alta de jugador.");
-            System.out.println("2 – Modificar los datos de un jugador.");
-            System.out.println("3 – Eliminar un jugador.");
-            System.out.println("4 – Mostrar todos los jugadores.");
-            System.out.println("5 – Mostrar la cantidad de jugadores en la lista.");
-            System.out.println("6 – Limpiar toda la lista de jugadores.");
+            System.out.println("\n***** MENU DE JUGADORES *****");
+            System.out.println("1 - Alta de jugador");
+            System.out.println("2 - Modificar los datos de un jugador");
+            System.out.println("3 - Eliminar un jugador");
+            System.out.println("4 - Mostrar todos los jugadores");
+            System.out.println("5 - Mostrar la cantidad de jugadores en la lista");
+            System.out.println("6 - Limpiar toda la lista de jugadores");
             System.out.println("7 - Salir");
             System.out.print("Elija una opcion: ");
-
-            try {
-                op = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Opcion no valida. Ingrese un numero.");
-                continue;
+            opcion=scanner.nextInt();
+            scanner.nextLine();
+            switch (opcion) {
+            case 1: {
+                Jugador jugador=new Jugador();
+                int dni;
+                System.out.print("Ingrese el DNI: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("El DNI solo puede contener numeros.");
+                    scanner.nextLine();
+                    System.out.print("Ingrese nuevamente el DNI: ");}
+                dni=scanner.nextInt();
+                scanner.nextLine();
+                jugador.setDni(dni);
+                String nombre;
+                do {
+                    System.out.print("Ingrese el nombre: ");
+                    nombre=scanner.nextLine();
+                    if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                        System.out.println("El nombre unicamente puede contener letras.");
+                    }
+                } while (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+                jugador.setNombre(nombre);
+                System.out.print("Ingrese el equipo: ");
+                jugador.setEquipo(scanner.nextLine());
+                System.out.print("Ingrese la nacionalidad: ");
+                jugador.setNacionalidad(scanner.nextLine());
+                System.out.print("Ingrese la estatura (en metros): ");
+                while (!scanner.hasNextDouble()) {
+                    System.out.println("La estatura solo puede contener numeros.");
+                    scanner.nextLine();
+                    System.out.print("Ingrese nuevamente la estatura: ");}
+                jugador.setEstatura(scanner.nextDouble());
+                scanner.nextLine();
+                jugadores.add(jugador);
+                System.out.println("Jugador creado correctamente.");
+                break;
             }
-
-            switch (op) {
-                case 1:
-                    Jugador nuevoJugador = new Jugador();
-
-                    System.out.print("Ingrese DNI: ");
-                    nuevoJugador.setDni(sc.nextLine());
-
-                    System.out.print("Ingrese Nombre: ");
-                    nuevoJugador.setNombre(sc.nextLine());
-
-                    System.out.print("Ingrese Equipo: ");
-                    nuevoJugador.setEquipo(sc.nextLine());
-
-                    System.out.print("Ingrese Nacionalidad: ");
-                    nuevoJugador.setNacionalidad(sc.nextLine());
-
-                    System.out.print("Ingrese Estatura (ej. 1.85): ");
-                    try {
-                        nuevoJugador.setEstatura(Double.parseDouble(sc.nextLine()));
-                    } catch (NumberFormatException e) {
-                        nuevoJugador.setEstatura(0.0);
-                        System.out.println("Error en el formato de estatura. Se guardo 0.0");
+            case 2: {
+                int dniBuscado;
+                System.out.print("Ingrese el DNI del jugador a modificar: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("El DNI solo puede contener numeros.");
+                    scanner.nextLine();
+                    System.out.print("Ingrese nuevamente el DNI: ");}
+                dniBuscado=scanner.nextInt();
+                scanner.nextLine();
+                Jugador encontrado=null;
+                for (Jugador j: jugadores) {
+                    if (j.getDni()==dniBuscado) {
+                        encontrado=j;
+                        break;
                     }
-
-                    listaJugadores.add(nuevoJugador);
-                    System.out.println("Jugador dado de alta.");
-                    break;
-
-                case 2:
-                    System.out.print("Ingrese DNI del jugador a modificar: ");
-                    String dniBuscar = sc.nextLine();
-                    boolean encontradoMod = false;
-
-                    for (Jugador j : listaJugadores) {
-                        if (j.getDni().equals(dniBuscar)) {
-                            encontradoMod = true;
-                            System.out.println("--- Datos actuales ---");
-                            j.mostrarDatos();
-
-                            System.out.println("\nIngrese los nuevos datos:");
-                            System.out.print("Nuevo Nombre: ");
-                            j.setNombre(sc.nextLine());
-
-                            System.out.print("Nuevo Equipo: ");
-                            j.setEquipo(sc.nextLine());
-
-                            System.out.print("Nueva Nacionalidad: ");
-                            j.setNacionalidad(sc.nextLine());
-
-                            System.out.print("Nueva Estatura: ");
-                            try {
-                                j.setEstatura(Double.parseDouble(sc.nextLine()));
-                            } catch (NumberFormatException e) {
-                                System.out.println("Formato incorrecto. Se mantiene la estatura anterior.");
-                            }
-                            System.out.println("Datos modificados.");
-                            break;
+                }
+                if (encontrado!=null) {
+                    System.out.println("Datos actuales del jugador:");
+                    encontrado.mostrarDatos();
+                    String nombre;
+                    do {
+                        System.out.print("Ingrese el nuevo nombre: ");
+                        nombre=scanner.nextLine();
+                        if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                            System.out.println("El nombre unicamente puede contener letras.");
                         }
-                    }
-                    if (!encontradoMod) {
-                        System.out.println("No se encuentra el dni");
-                    }
-                    break;
-
-                case 3:
-                    System.out.print("Ingrese DNI del jugador a eliminar: ");
-                    String dniEliminar = sc.nextLine();
-                    boolean encontradoElim = false;
-
-                    for (int i = 0; i < listaJugadores.size(); i++) {
-                        if (listaJugadores.get(i).getDni().equals(dniEliminar)) {
-                            listaJugadores.remove(i);
-                            encontradoElim = true;
-                            System.out.println("Jugador eliminado.");
-                            break;
-                        }
-                    }
-                    if (!encontradoElim) {
-                        System.out.println("No se encuentra el dni");
-                    }
-                    break;
-
-                case 4:
-                    if (listaJugadores.isEmpty()) {
-                        System.out.println("La lista esta vacia.");
-                    } else {
-                        System.out.println("--- LISTA DE JUGADORES ---");
-                        for (Jugador j : listaJugadores) {
-                            j.mostrarDatos();
-                            System.out.println("--------------------------");
-                        }
-                    }
-                    break;
-
-                case 5:
-                    System.out.println("Cantidad de jugadores en la lista: " + listaJugadores.size());
-                    break;
-
-                case 6:
-                    listaJugadores.clear();
-                    System.out.println("Toda la lista ha sido limpiada.");
-                    break;
-
-                case 7:
-                    System.out.println("Saliendo del programa...");
-                    break;
-
-                default:
-                    System.out.println("Opcion no valida.");
-                    break;
+                    } while (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+"));
+                    encontrado.setNombre(nombre);
+                    System.out.print("Ingrese el nuevo equipo: ");
+                    encontrado.setEquipo(scanner.nextLine());
+                    System.out.print("Ingrese la nueva nacionalidad: ");
+                    encontrado.setNacionalidad(scanner.nextLine());
+                    System.out.print("Ingrese la nueva estatura (en metros): ");
+                    while (!scanner.hasNextDouble()) {
+                        System.out.println("La estatura solo puede contener numeros.");
+                        scanner.nextLine();
+                        System.out.print("Ingrese nuevamente la estatura: ");}
+                    encontrado.setEstatura(scanner.nextDouble());
+                    scanner.nextLine();
+                    System.out.println("Jugador modificado correctamente.");
+                } else {
+                    System.out.println("No se encuentra el dni");
+                }
+                break;
             }
-        } while (op != 7);
-
-        sc.close();
+            case 3: {
+                int dniBuscado;
+                System.out.print("Ingrese el DNI del jugador a eliminar: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("El DNI solo puede contener numeros.");
+                    scanner.nextLine();
+                    System.out.print("Ingrese nuevamente el DNI: ");}
+                dniBuscado=scanner.nextInt();
+                scanner.nextLine();
+                Jugador encontrado=null;
+                for (Jugador j: jugadores) {
+                    if (j.getDni()==dniBuscado) {
+                        encontrado=j;
+                        break;
+                    }
+                }
+                if (encontrado!=null) {
+                    jugadores.remove(encontrado);
+                    System.out.println("Jugador eliminado correctamente.");
+                } else {
+                    System.out.println("No se encuentra el dni");
+                }
+                break;
+            }
+            case 4: {
+                if (jugadores.isEmpty()) {
+                    System.out.println("No hay jugadores guardados.");
+                } else {
+                    for (Jugador j: jugadores) {
+                        j.mostrarDatos();
+                        System.out.println("--------------------------------------");
+                    }
+                }
+                break;
+            }
+            case 5: {
+                System.out.println("Cantidad de jugadores: "+jugadores.size());
+                break;
+            }
+            case 6: {
+                jugadores.clear();
+                System.out.println("Lista de jugadores limpiada correctamente.");
+                break;
+            }
+            case 7: {
+                System.out.println("Programa finalizado.");
+                break;
+            }
+            default: {
+                System.out.println("Opcion no valida. Ingrese un numero del 1 al 7.");
+            }
+            }
+        } while (opcion!=7);
+        scanner.close();
     }
 }
